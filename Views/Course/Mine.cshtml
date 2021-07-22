@@ -1,0 +1,58 @@
+﻿@model IEnumerable<BigSchool.Models.Course>
+
+@{ ViewBag.Title = "Mine";
+  Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<h2>Mine</h2>
+
+<div class="row">
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <ul class="course">
+        @foreach (var course in Model)
+        {
+<li>
+    <div class="date">
+        <div class="month">
+            @course.DateTime.ToString("MM")
+        </div>
+        <div class="day">
+            @course.DateTime.ToString("dd")
+        </div>
+    </div>
+    <div class="details">
+        <span class="lecture">
+            @course.Name
+        </span>
+        <span class="category">
+            @course.Category.Name
+        </span>
+    </div>
+    <div class="action">
+        <a href="@Url.Action("Edit","Course", new { id = course.Id, CategoryId = course.CategoryId })">Editttt</a>
+        <a id="@course.Id" href="#" class="delete">Delete</a>
+    </div>
+</li>}
+    </ul>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            $(".delete").click(function () {
+
+                $.ajax({
+                    type: "GET",
+                    url: "../api/DeteleCourse",
+                    data: { 'id': $(this).attr("Id") },
+                    success: function (dt) {
+                        alert("ok")
+                     //   $("body").load(@Url.Action("Mine","Course"));
+                    },
+                    error: function (er) {
+                        alert("error")
+                    }
+                })
+            });
+        });
+    </script>
+}
